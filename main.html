@@ -1,315 +1,361 @@
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>ELECTRIC POWER MANAGEMENT SYSTEM</title>
-        <link rel="stylesheet" type="text/css" href="main_style.css"> 
-        
-    </head>
-    <body>
-        
-        <form id="loginForm">
-            <h1>Login</h1>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <input type="checkbox" id="loginPasswordCheckbox" onchange="togglePasswordVisibility()">Show Password<br><br>
-            <input type="submit" value="Login">
-        </form>
-        
-        <form id="signupForm">
-            <h1>Sign up</h1>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required><br><br>
-            <label for="signupEmail">Email:</label>
-            <input type="email" id="signupEmail" name="email" required><br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="signupPassword" name="password" required>
-            <input type="checkbox" id="signupPasswordCheckbox" onchange="togglePasswordVisibility()">Show Password<br><br>
-            <input type="submit" id="signup_submit" value="Signup">
-        </form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ELECTRIC POWER MANAGEMENT SYSTEM</title>
+    <link rel="stylesheet" type="text/css" href="main_style.css"> 
+    
+</head>
+<body>
+    
+    <form id="loginForm">
+        <h1>Login</h1>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <input type="checkbox" id="loginPasswordCheckbox" onchange="togglePasswordVisibility()">Show Password<br><br>
+        <input type="submit" value="Login">
+    </form>
+    
+    <form id="signupForm">
+        <h1>Sign up</h1>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="signupEmail">Email:</label>
+        <input type="email" id="signupEmail" name="email" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="signupPassword" name="password" required>
+        <input type="checkbox" id="signupPasswordCheckbox" onchange="togglePasswordVisibility()">Show Password<br><br>
+        <input type="submit" id="signup_submit" value="Signup">
+    </form>
 
-        <div id="applianceInventoryContent" style="display: none;">
-            <p id="welcomeMessage"></p> 
-            <h1>Inventory of Appliances</h1>
+    <div id="applianceInventoryContent" style="display: none;">
+        <p id="welcomeMessage"></p> 
+        <h1>Inventory of Appliances</h1>
 
-            <button id="addButton">+</button>
+        <button id="addButton">+</button>
 
-            <div id="inputForm" style="display: none;">
-                <h2>Appliance Data Form</h2>
-                <form id="appliancedata">
-                    <span id="userEmail" style="display: none"></span>
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" required><br>
-                    <label for="name">Appliance Name:</label>
-                    <input type="text" id="name" required><br>
-                    <label for="power">Power Use (Watt):</label>
-                    <input type="number" id="power" required><br>
-                    <label for="dailyUse">Daily use time (hrs):</label>
-                    <input type="number" id="dailyUse" min="0" max="24" required><br>
-                    <label for="rate">Monthly Power Rates of ALECO (Pesos per kWh):</label>
-                    <input type="number" id="rate" required><br>
-                    <button id="saveButton">Add</button>
-                    <button id="updateButton">Update</button>
-                </form>
-                
-            </div>
-
-            <table id="applianceTable">
-                <tr>
-                    <th>Date</th>
-                    <th>Appliance Name</th>
-                    <th>Power Use (Watt)</th>
-                    <th>Daily use time (hrs)</th>
-                    <th>Monthly Power Rates of ALECO (Pesos per kWh)</th>
-                    <th>Daily Consumption (kWh)</th>
-                    <th>Actions</th>
-                </tr>
-                <!-- Existing appliance records will be dynamically added here -->
-                
-            </table>
-
-            <script>
-                document.getElementById("addButton").addEventListener("click", function(){
-                    document.getElementById("inputForm").style.display = "block";
-                    document.getElementById("date").value = "";
-                    document.getElementById("name").value = "";
-                    document.getElementById("power").value = "";
-                    document.getElementById("dailyUse").value = "";
-                    document.getElementById("rate").value = "";
-                    document.getElementById("saveButton").style.display = "inline-block";
-                    document.getElementById("updateButton").style.display = "none";
-                });
-            
-                // Get the user's email from local storage and display it
-                var userEmail = localStorage.getItem("userEmail");
-                if (userEmail) {
-                    document.getElementById("userEmail").innerText = "User: " + userEmail;
-                }
-            
-                document.getElementById("saveButton").addEventListener("click", function() {
-                    var date = document.getElementById("date").value;
-                    var name = document.getElementById("name").value;
-                    var power = document.getElementById("power").value;
-                    var dailyUse = document.getElementById("dailyUse").value;
-                    var rate = document.getElementById("rate").value;
-            
-                    if (date === "" || name === "" || power === "" || dailyUse === "" || rate === "") {
-                        alert("Please fill in all fields.");
-                        return; // Stop further execution
-                    }
-            
-                    var dailyConsumption = (power * dailyUse) / 1000;
-            
-                    var table = document.getElementById("applianceTable");
-                    var row = table.insertRow(-1);
-            
-                    var dateCell = row.insertCell(0);
-                    var nameCell = row.insertCell(1);
-                    var powerCell = row.insertCell(2);
-                    var dailyUseCell = row.insertCell(3);
-                    var rateCell = row.insertCell(4);
-                    var consumptionCell = row.insertCell(5);
-                    var actionsCell = row.insertCell(6);
-            
-                    dateCell.textContent = date;
-                    nameCell.textContent = name;
-                    powerCell.textContent = power;
-                    dailyUseCell.textContent = dailyUse;
-                    rateCell.textContent = rate;
-                    consumptionCell.textContent = dailyConsumption.toFixed(2);
-                    actionsCell.innerHTML = `
-                        <div class="actionButtons">
-                        <button class="editButton" onclick="editRow(this)">Edit</button>
-                        <button class="deleteButton" onclick="deleteRow(this, 'your_appliance_id')">Delete</button>
-                        </div>
-                    `;
-            
-                    document.getElementById("inputForm").style.display = "none";
-                    document.getElementById("date").value = "";
-                    document.getElementById("name").value = "";
-                    document.getElementById("power").value = "";
-                    document.getElementById("dailyUse").value = "";
-                    document.getElementById("rate").value = "";
-                });
-            
-                document.getElementById("updateButton").addEventListener("click", function(e) {
-                    e.preventDefault();
-            
-                    var date = document.getElementById("date").value;
-                    var name = document.getElementById("name").value;
-                    var power = document.getElementById("power").value;
-                    var dailyUse = document.getElementById("dailyUse").value;
-                    var rate = document.getElementById("rate").value;
-            
-                    if (date === "" || name === "" || power === "" || dailyUse === "" || rate === "") {
-                        alert("Please fill in all fields.");
-                        return; // Stop further execution
-                    }
-            
-                    var dailyConsumption = (power * dailyUse) / 1000;
-            
-                    updateApplianceRecord(date, name, power, dailyUse, rate, dailyConsumption);
-                    document.getElementById("appliancedata").reset();
-                    document.getElementById("inputForm").style.display = "none";
-            
-                    // Get the table body element
-                    var tableBody = document.getElementById("applianceTable");
-            
-                    // Create a new row and cells for the updated data
-                    var newRow = tableBody.insertRow();
-                    var dateCell = newRow.insertCell();
-                    var nameCell = newRow.insertCell();
-                    var powerCell = newRow.insertCell();
-                    var dailyUseCell = newRow.insertCell();
-                    var rateCell = newRow.insertCell();
-                    var consumptionCell = newRow.insertCell();
-                    var actionCell = newRow.insertCell();
-            
-                    // Set the content of the cells with the updated data
-                    dateCell.textContent = date;
-                    nameCell.textContent = name;
-                    powerCell.textContent = power;
-                    dailyUseCell.textContent = dailyUse;
-                    rateCell.textContent = rate;
-                    consumptionCell.textContent = dailyConsumption.toFixed(2);
-            
-                    var editButton = document.createElement("button");
-                    editButton.innerHTML = "Edit";
-                    editButton.addEventListener("click", function(){
-                        editRow(newRow);
-                    });
-            
-                    var deleteButton = document.createElement("button");
-                    deleteButton.innerHTML = "Delete";
-                    deleteButton.addEventListener("click", function(){
-                        deleteRow(newRow);
-                    });
-            
-                    actionCell.appendChild(editButton);
-                    actionCell.appendChild(deleteButton);
-                });
-            
-                function updateApplianceRecord(date, name, power, dailyUse, rate, consumption) {
-                    var table = document.getElementById("applianceTable");
-                    var rows = table.rows;
-            
-                    for (var i = 1; i < rows.length; i++) {
-                        var row = rows[i];
-                        if (row.cells[0].textContent === date && row.cells[1].textContent === name) {
-                            row.cells[2].textContent = power;
-                            row.cells[3].textContent = dailyUse;
-                            row.cells[4].textContent = rate;
-                            row.cells[5].textContent = consumption;
-                            break;
-                        }
-                    }
-                }
-            
-                function editRow(button) {
-                    var row = button.parentNode.parentNode.parentNode;
-                    var cells = row.getElementsByTagName("td");
-            
-                    document.getElementById("date").value = cells[0].textContent;
-                    document.getElementById("name").value = cells[1].textContent;
-                    document.getElementById("power").value = cells[2].textContent;
-                    document.getElementById("dailyUse").value = cells[3].textContent;
-                    document.getElementById("rate").value = cells[4].textContent;
-            
-                    row.remove();
-                    document.getElementById("inputForm").style.display = "block";
-                    document.getElementById("saveButton").style.display = "none";
-                    document.getElementById("updateButton").style.display = "inline-block";
-
-                    document.getElementById("appliancedata").dataset.applianceId = applianceId;
-                }
-            
-                function deleteRow(button) {
-                    var row = button.parentNode.parentNode.parentNode;
-                    row.remove();
-                }
-            </script>
-            
+        <div id="inputForm" style="display: none;">
+            <h2>Appliance Data Form</h2>
+            <form id="appliancedata">
+                <span id="userEmail" style="display: none"></span>
+                <label for="date">Date:</label>
+                <input type="date" id="date" required><br>
+                <label for="name">Appliance Name:</label>
+                <input type="text" id="name" required><br>
+                <label for="power">Power Use (Watt):</label>
+                <input type="number" id="power" required><br>
+                <label for="dailyUse">Daily use time (hrs):</label>
+                <input type="number" id="dailyUse" min="0" max="24" required><br>
+                <label for="rate">Monthly Power Rates of ALECO (Pesos per kWh):</label>
+                <input type="number" id="rate" required><br>
+                <button id="saveButton">Add</button>
+                <button id="updateButton">Update</button>
+            </form>
             
         </div>
 
-        <script type="module">
-            // Import the functions you need from the SDKs you need
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-            import { getDatabase, ref, update, get, child, set } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
-            import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-            import { getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        <table id="applianceTable">
+            <tr>
+                <th>Date</th>
+                <th>Appliance Name</th>
+                <th>Power Use (Watt)</th>
+                <th>Daily use time (hrs)</th>
+                <th>Monthly Power Rates of ALECO (Pesos per kWh)</th>
+                <th>Daily Consumption (kWh)</th>
+                <th>Actions</th>
+            </tr>
+            <!-- Existing appliance records will be dynamically added here -->
             
+        </table>
 
-            // Your web app's Firebase configuration
-            const firebaseConfig = {
-                apiKey: "AIzaSyDJV31xxwvhSrY3pBaoinphc3bR2_e9z8E",
-                authDomain: "epms-proj.firebaseapp.com",
-                databaseURL: "https://epms-proj-default-rtdb.firebaseio.com",
-                projectId: "epms-proj",
-                storageBucket: "epms-proj.appspot.com",
-                messagingSenderId: "647084060085",
-                appId: "1:647084060085:web:1a4972ff5ce10287523dfc"
+        <script>
+            document.getElementById("addButton").addEventListener("click", function(){
+                document.getElementById("inputForm").style.display = "block";
+                document.getElementById("date").value = "";
+                document.getElementById("name").value = "";
+                document.getElementById("power").value = "";
+                document.getElementById("dailyUse").value = "";
+                document.getElementById("rate").value = "";
+                document.getElementById("saveButton").style.display = "inline-block";
+                document.getElementById("updateButton").style.display = "none";
+            });
+        
+            // Get the user's email from local storage and display it
+            var userEmail = localStorage.getItem("userEmail");
+            if (userEmail) {
+                document.getElementById("userEmail").innerText = "User: " + userEmail;
+            }
+        
+            document.getElementById("saveButton").addEventListener("click", function() {
+                var date = document.getElementById("date").value;
+                var name = document.getElementById("name").value;
+                var power = document.getElementById("power").value;
+                var dailyUse = document.getElementById("dailyUse").value;
+                var rate = document.getElementById("rate").value;
+        
+                if (date === "" || name === "" || power === "" || dailyUse === "" || rate === "") {
+                    alert("Please fill in all fields.");
+                    return; // Stop further execution
+                }
+        
+                var dailyConsumption = (power * dailyUse) / 1000;
+        
+                var table = document.getElementById("applianceTable");
+                var row = table.insertRow(-1);
+        
+                var dateCell = row.insertCell(0);
+                var nameCell = row.insertCell(1);
+                var powerCell = row.insertCell(2);
+                var dailyUseCell = row.insertCell(3);
+                var rateCell = row.insertCell(4);
+                var consumptionCell = row.insertCell(5);
+                var actionsCell = row.insertCell(6);
+        
+                dateCell.textContent = date;
+                nameCell.textContent = name;
+                powerCell.textContent = power;
+                dailyUseCell.textContent = dailyUse;
+                rateCell.textContent = rate;
+                consumptionCell.textContent = dailyConsumption.toFixed(2);
+                actionsCell.innerHTML = `
+                    <div class="actionButtons">
+                    <button class="editButton" onclick="editRow(this)">Edit</button>
+                    <button class="deleteButton" onclick="deleteRow(this, 'your_appliance_id')">Delete</button>
+                    </div>
+                `;
+        
+                document.getElementById("inputForm").style.display = "none";
+                document.getElementById("date").value;
+                document.getElementById("name").value ;
+                document.getElementById("power").value;
+                document.getElementById("dailyUse").value;
+                document.getElementById("rate").value;
+            });
+        
+            document.getElementById("updateButton").addEventListener("click", function(e) {
+                e.preventDefault();
+        
+                var date = document.getElementById("date").value;
+                var name = document.getElementById("name").value;
+                var power = document.getElementById("power").value;
+                var dailyUse = document.getElementById("dailyUse").value;
+                var rate = document.getElementById("rate").value;
+        
+                if (date === "" || name === "" || power === "" || dailyUse === "" || rate === "") {
+                    alert("Please fill in all fields.");
+                    return; // Stop further execution
+                }
+        
+                var dailyConsumption = (power * dailyUse) / 1000;
+        
+                updateApplianceRecord(date, name, power, dailyUse, rate, dailyConsumption);
+                document.getElementById("appliancedata").reset();
+                document.getElementById("inputForm").style.display = "none";
+        
+                // Get the table body element
+                var tableBody = document.getElementById("applianceTable");
+        
+                // Create a new row and cells for the updated data
+                var newRow = tableBody.insertRow();
+                var dateCell = newRow.insertCell();
+                var nameCell = newRow.insertCell();
+                var powerCell = newRow.insertCell();
+                var dailyUseCell = newRow.insertCell();
+                var rateCell = newRow.insertCell();
+                var consumptionCell = newRow.insertCell();
+                var actionCell = newRow.insertCell();
+        
+                // Set the content of the cells with the updated data
+                dateCell.textContent = date;
+                nameCell.textContent = name;
+                powerCell.textContent = power;
+                dailyUseCell.textContent = dailyUse;
+                rateCell.textContent = rate;
+                consumptionCell.textContent = dailyConsumption.toFixed(2);
+        
+                var editButton = document.createElement("button");
+                editButton.innerHTML = "Edit";
+                editButton.addEventListener("click", function(){
+                    editRow(newRow);
+                });
+        
+                var deleteButton = document.createElement("button");
+                deleteButton.innerHTML = "Delete";
+                deleteButton.addEventListener("click", function(){
+                    deleteRow(newRow);
+                });
+        
+                actionCell.appendChild(editButton);
+                actionCell.appendChild(deleteButton);
+            });
+        
+            function updateApplianceRecord(date, name, power, dailyUse, rate, consumption) {
+                var table = document.getElementById("applianceTable");
+                var rows = table.rows;
+        
+                for (var i = 1; i < rows.length; i++) {
+                    var row = rows[i];
+                    if (row.cells[0].textContent === date && row.cells[1].textContent === name) {
+                        row.cells[2].textContent = power;
+                        row.cells[3].textContent = dailyUse;
+                        row.cells[4].textContent = rate;
+                        row.cells[5].textContent = consumption;
+                        break;
+                    }
+                }
+            }
+        
+            function editRow(button) {
+                var row = button.parentNode.parentNode.parentNode;
+                var cells = row.getElementsByTagName("td");
+        
+                document.getElementById("date").value = cells[0].textContent;
+                document.getElementById("name").value = cells[1].textContent;
+                document.getElementById("power").value = cells[2].textContent;
+                document.getElementById("dailyUse").value = cells[3].textContent;
+                document.getElementById("rate").value = cells[4].textContent;
+        
+                row.remove();
+                document.getElementById("inputForm").style.display = "block";
+                document.getElementById("saveButton").style.display = "none";
+                document.getElementById("updateButton").style.display = "inline-block";
+
+            }
+        
+            function deleteRow(button) {
+                var row = button.parentNode.parentNode.parentNode;
+                row.remove();
+            }
+        </script>
+        
+        
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, update, get, child, set } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJV31xxwvhSrY3pBaoinphc3bR2_e9z8E",
+            authDomain: "epms-proj.firebaseapp.com",
+            databaseURL: "https://epms-proj-default-rtdb.firebaseio.com",
+            projectId: "epms-proj",
+            storageBucket: "epms-proj.appspot.com",
+            messagingSenderId: "647084060085",
+            appId: "1:647084060085:web:1a4972ff5ce10287523dfc"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        //gets exsisting appliance data
+        function getApplicationData() {
+        const userUID = auth.currentUser.uid;
+        const appliancesCollectionRef = collection(db, "users", userUID, "appliances");
+
+        getDocs(appliancesCollectionRef)
+            .then((snapshot) => {
+            var applianceList = [];
+            snapshot.forEach((doc) => {
+                applianceList.push(doc.data());
+            });
+            console.log(applianceList);
+
+            // Get the table reference
+            var table = document.getElementById("applianceTable");
+
+
+            // Iterate over the applianceList and populate the table rows
+            applianceList.forEach((appliance) => {
+                var row = table.insertRow(-1);
+
+                var dateCell = row.insertCell(0);
+                var nameCell = row.insertCell(1);
+                var powerCell = row.insertCell(2);
+                var dailyUseCell = row.insertCell(3);
+                var rateCell = row.insertCell(4);
+                var consumptionCell = row.insertCell(5);
+                var actionsCell = row.insertCell(6);
+
+                dateCell.innerHTML = appliance.date;
+                nameCell.innerHTML = appliance.name;
+                powerCell.innerHTML = appliance.power;
+                dailyUseCell.innerHTML = appliance.dailyUse;
+                rateCell.innerHTML = appliance.rate;
+                consumptionCell.innerHTML = appliance.consumption;
+                actionsCell.innerHTML = `
+                <div class="actionButtons">
+                    <button class="editButton" onclick="editRow(this)">Edit</button>
+                    <button class="deleteButton" onclick="deleteRow(this)">Delete</button>
+                </div>
+                `;
+            });
+            })
+            .catch((error) => {
+            console.error("Error getting appliance data: ", error);
+            });
+        }
+
+        //stores appliance data
+        document.getElementById("appliancedata", "saveButton").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            // Retrieve the form input values
+            const email = auth.currentUser.email;
+            const date = document.getElementById("date").value.trim();
+            const name = document.getElementById("name").value.trim();
+            const power = document.getElementById("power").value.trim();
+            const dailyUse = document.getElementById("dailyUse").value.trim();
+            const rate = document.getElementById("rate").value.trim();
+
+            const dailyConsumption = (power * dailyUse) / 1000;
+
+            // Create an object with the appliance data
+            const applianceData = {
+                email: email,
+                date: date,
+                name: name,
+                power: power,
+                dailyUse: dailyUse,
+                rate: rate,
+                consumption: dailyConsumption.toFixed(2),
             };
 
-            // Initialize Firebase
-            const app = initializeApp(firebaseConfig);
-            const database = getDatabase(app);
-            const auth = getAuth(app);
-            const db = getFirestore(app);
-
-            //gets exsisting appliance data
-            function getApplicationData() {
+            // Reference the collection in Firestore where the data will be stored
             const userUID = auth.currentUser.uid;
             const appliancesCollectionRef = collection(db, "users", userUID, "appliances");
 
-            getDocs(appliancesCollectionRef)
-                .then((snapshot) => {
-                var applianceList = [];
-                snapshot.forEach((doc) => {
-                    applianceList.push(doc.data());
-                });
-                console.log(applianceList);
-
-                // Get the table reference
-                var table = document.getElementById("applianceTable");
-
-
-                // Iterate over the applianceList and populate the table rows
-                applianceList.forEach((appliance) => {
-                    var row = table.insertRow(-1);
-
-                    var dateCell = row.insertCell(0);
-                    var nameCell = row.insertCell(1);
-                    var powerCell = row.insertCell(2);
-                    var dailyUseCell = row.insertCell(3);
-                    var rateCell = row.insertCell(4);
-                    var consumptionCell = row.insertCell(5);
-                    var actionsCell = row.insertCell(6);
-
-                    dateCell.innerHTML = appliance.date;
-                    nameCell.innerHTML = appliance.name;
-                    powerCell.innerHTML = appliance.power;
-                    dailyUseCell.innerHTML = appliance.dailyUse;
-                    rateCell.innerHTML = appliance.rate;
-                    consumptionCell.innerHTML = appliance.consumption;
-                    actionsCell.innerHTML = `
-                    <div class="actionButtons">
-                        <button class="editButton" onclick="editRow(this)">Edit</button>
-                        <button class="deleteButton" onclick="deleteRow(this)">Delete</button>
-                    </div>
-                    `;
-                });
+            // Store the data in Firestore
+            addDoc(appliancesCollectionRef, applianceData)
+                .then(() => {
+                    console.log("Appliance data added to Firestore!");
+                    alert("Appliance data added to Firestore!");
                 })
                 .catch((error) => {
-                console.error("Error getting appliance data: ", error);
+                    console.error("Error adding appliance data: ", error);
+                    alert("Error adding appliance data to Firestore: " + error.message);
                 });
-            }
 
-            //stores appliance data
-            document.getElementById("appliancedata", "saveButton").addEventListener("submit", (e) => {
-                e.preventDefault();
+            // Reset the form fields
+            document.getElementById("date").value = "";
+            document.getElementById("name").value = "";
+            document.getElementById("power").value = "";
+            document.getElementById("dailyUse").value = "";
+            document.getElementById("rate").value = "";
+        });
 
+        //update appliance data
+        document.getElementById("updateButton").addEventListener("submit", (e) => {
+                
                 // Retrieve the form input values
                 const email = auth.currentUser.email;
                 const date = document.getElementById("date").value.trim();
@@ -336,14 +382,14 @@
                 const appliancesCollectionRef = collection(db, "users", userUID, "appliances");
 
                 // Store the data in Firestore
-                addDoc(appliancesCollectionRef, applianceData)
+                updateDoc(appliancesCollectionRef, applianceData)
                     .then(() => {
-                        console.log("Appliance data added to Firestore!");
-                        alert("Appliance data added to Firestore!");
+                        console.log("Data updated successfully! ");
+                        alert("Data updated successfully! ");
                     })
                     .catch((error) => {
-                        console.error("Error adding appliance data: ", error);
-                        alert("Error adding appliance data to Firestore: " + error.message);
+                        console.error("Error updating appliance data: ", error);
+                        alert("Error updating appliance data to Firestore: " + error.message);
                     });
 
                 // Reset the form fields
@@ -354,135 +400,98 @@
                 document.getElementById("rate").value = "";
             });
 
-            document.getElementById("updateButton").addEventListener("click", (e) => {
-        e.preventDefault();
+        
+        //LOGIN
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
 
-        // Retrieve the form input values
-        const applianceId = document.getElementById("appliancedata").dataset.applianceId;
-        const updatedData = {
-            date: document.getElementById("date").value.trim(),
-            name: document.getElementById("name").value.trim(),
-            power: document.getElementById("power").value.trim(),
-            dailyUse: document.getElementById("dailyUse").value.trim(),
-            rate: document.getElementById("rate").value.trim(),
-        };
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-        // Check if any properties in updatedData are undefined
-        if (Object.values(updatedData).some((value) => value === undefined || value === '')) {
-            alert("Please fill in all fields.");
-            return;
-        }
-
-        updateApplianceData(applianceId, updatedData);
-    });
-
-    async function updateApplianceData(applianceId, updatedData) {
-        // Reference the document in Firestore to update
-        const userUID = auth.currentUser.uid;
-        const applianceRef = doc(db, "users", userUID, "appliances", applianceId);
-
-        try {
-            await updateDoc(applianceRef, updatedData);
-            console.log("Appliance updated successfully");
-            alert("Appliance updated successfully");
-        } catch (error) {
-            console.error("Error updating appliance: ", error);
-            alert("Error updating appliance: " + error.message);
-        }
-    }
-
-            
-            //LOGIN
-            const loginForm = document.getElementById('loginForm');
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-
-                signInWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
-                        // Signed in
-                        const user = userCredential.user;
-                        const dt = new Date();
-                        update(ref(database, `users/${user.uid}`), {
-                            last_login: dt,
-                        });
-                        alert('User logged in!');
-                        //removes the login and signup forms
-                        loginForm.style.display = 'none';
-                        signupForm.style.display = 'none';
-
-                        // Show the appliance inventory page
-                        document.getElementById('applianceInventoryContent').style.display = 'block';
-                        get(child(ref(database), `users/${user.uid}`)).then((snapshot) => {
-                            const userDetails = snapshot.val();
-                            const username = userDetails.username;
-                            const email = userDetails.email;
-
-                            //welcome message based on the last user logged in
-                            const welcomeMessage = document.getElementById('welcomeMessage');
-                            welcomeMessage.textContent = `Welcome, ${username}!`;
-
-                            //gets the email of the user for the appliance database
-                            const userEmail = document.getElementById('userEmail'); 
-                            userEmail.textContent = email;
-
-                            //calls application data
-                            getApplicationData();
-                        });
-                    })
-
-                    //error if user information not in database
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        alert(errorMessage);
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in
+                    const user = userCredential.user;
+                    const dt = new Date();
+                    update(ref(database, `users/${user.uid}`), {
+                        last_login: dt,
                     });
-            });
+                    alert('User logged in!');
+                    //removes the login and signup forms
+                    loginForm.style.display = 'none';
+                    signupForm.style.display = 'none';
 
-            //SIGNUP
-            const signupForm = document.getElementById('signupForm');
-            signupForm.addEventListener('submit', (e) => {
-                e.preventDefault();
+                    // Show the appliance inventory page
+                    document.getElementById('applianceInventoryContent').style.display = 'block';
+                    get(child(ref(database), `users/${user.uid}`)).then((snapshot) => {
+                        const userDetails = snapshot.val();
+                        const username = userDetails.username;
+                        const email = userDetails.email;
 
-                const email = document.getElementById('signupEmail').value;
-                const password = document.getElementById('signupPassword').value;
-                const username = document.getElementById('username').value;
-
-                createUserWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
-                        // Signed up
-                        const user = userCredential.user;
-                        const dt = new Date();
-                        set(ref(database, `users/${user.uid}`), {
-                            email: email,
-                            username: username,
-                            signup_date: dt,
-                        });
-                        alert('User signed up and logged in!');
-                        //removes the login and signup forms
-                        loginForm.style.display = 'none';
-                        signupForm.style.display = 'none';
-
-                        // Show the appliance inventory page
-                        document.getElementById('applianceInventoryContent').style.display = 'block';
-
-                        //welcome message based on the user just logged in
+                        //welcome message based on the last user logged in
                         const welcomeMessage = document.getElementById('welcomeMessage');
                         welcomeMessage.textContent = `Welcome, ${username}!`;
 
                         //gets the email of the user for the appliance database
-                        const userEmail = document.getElementById('userEmail');
+                        const userEmail = document.getElementById('userEmail'); 
                         userEmail.textContent = email;
-                    })
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        alert(errorMessage);
-                    });
-            });
 
-        </script>
-    </body>
-    </html>
+                        //calls application data
+                        getApplicationData();
+                    });
+                })
+
+                //error if user information not in database
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(errorMessage);
+                });
+        });
+
+        //SIGNUP
+        const signupForm = document.getElementById('signupForm');
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const username = document.getElementById('username').value;
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed up
+                    const user = userCredential.user;
+                    const dt = new Date();
+                    set(ref(database, `users/${user.uid}`), {
+                        email: email,
+                        username: username,
+                        signup_date: dt,
+                    });
+                    alert('User signed up and logged in!');
+                    //removes the login and signup forms
+                    loginForm.style.display = 'none';
+                    signupForm.style.display = 'none';
+
+                    // Show the appliance inventory page
+                    document.getElementById('applianceInventoryContent').style.display = 'block';
+
+                    //welcome message based on the user just logged in
+                    const welcomeMessage = document.getElementById('welcomeMessage');
+                    welcomeMessage.textContent = `Welcome, ${username}!`;
+
+                    //gets the email of the user for the appliance database
+                    const userEmail = document.getElementById('userEmail');
+                    userEmail.textContent = email;
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(errorMessage);
+                });
+        });
+
+    </script>
+</body>
+</html>
