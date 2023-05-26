@@ -3,7 +3,7 @@
 <head>
     <title>ELECTRIC POWER MANAGEMENT SYSTEM</title>
     <link rel="stylesheet" type="text/css" href="main_style.css"> 
-    
+    <script src = "functions.js"></script>
 </head>
 <body>
     
@@ -28,10 +28,16 @@
         <input type="checkbox" id="signupPasswordCheckbox" onchange="togglePasswordVisibility()">Show Password<br><br>
         <input type="submit" id="signup_submit" value="Signup">
     </form>
-
-    <div id="applianceInventoryContent" style="display: none;">
+    
+    <div id = "menu" style = "display: none;">
         <p id="welcomeMessage"></p>
         <button id="logoutButton">Logout</button>
+
+        <button id="showInventoryButton">Show Appliance Inventory</button>
+        <button id="showCalculationButton">Show Calculation</button>
+    </div>
+
+    <div id="applianceInventoryContent" style="display: none;">
 
         <h1>Inventory of Appliances</h1>
       
@@ -55,6 +61,7 @@
             <button id="updateButton">Update</button>
           </form>
         </div>
+
       
         <table id="applianceTable">
           <tr>
@@ -72,17 +79,18 @@
         <script>
             //logout
             document.getElementById("logoutButton").addEventListener("click", function() {
-                // Hide the appliance inventory content
-                document.getElementById("applianceInventoryContent").style.display = "none";
-                
-                // Show the login and signup forms
-                document.getElementById("loginForm").style.display = "block";
-                document.getElementById("signupForm").style.display = "block";
-                
-                // Clear any stored user email
-                localStorage.removeItem("userEmail");
+                logout();
             });
-
+            //navbutton1
+            document.getElementById("showInventoryButton").addEventListener("click", function() {
+                inventoryButton();
+            });
+            //navbutton2
+            document.getElementById("showCalculationButton").addEventListener("click", function() {
+                calculationButton();
+            });
+            
+            
             //add function
           document.getElementById("addButton").addEventListener("click", function() {
             document.getElementById("inputForm").style.display = "block";
@@ -151,7 +159,8 @@
             // Hide the input form
             document.getElementById("inputForm").style.display = "none";
           });
-      
+          
+          //update button
           document.getElementById("updateButton").addEventListener("click", function(e) {
             e.preventDefault();
 
@@ -219,7 +228,8 @@
               }
             }
           }
-      
+
+          //edit button
           function editRow(button) {
             var row = button.parentNode.parentNode.parentNode;
             var cells = row.getElementsByTagName("td");
@@ -236,15 +246,129 @@
       
             row.remove();
           }
-      
+
+          //delete button
           function deleteRow(button, applianceId) {
             var row = button.parentNode.parentNode.parentNode;
             row.remove();
-      
-            // Implement your delete logic here
           }
+
+          //calculates the total daily, weekly and monthly rates
+          function calculateTotalRate() {
+            var inventoryTable = document.getElementById("inventory-table");
+            var rows = inventoryTable.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+            var totalRate = 0;
+            
+            for (var i = 0; i < rows.length; i++) {
+                var power = parseFloat(rows[i].cells[2].innerHTML);
+                var time = parseFloat(rows[i].cells[3].innerHTML);
+                var powerRate = parseFloat(rows[i].cells[4].innerHTML);
+                var rate = power * time * powerRate;
+                totalRate+= rate;
+            }
+            document.getElementById("totalRate").textContent = totalRate.toFixed(2);
+                    
+                    var monthlyRate = totalRate * 30; // Assuming 30 days in a month
+                    document.getElementById("monthlyRate").textContent = monthlyRate.toFixed(2);
+                    
+                    var weeklyRate = totalRate * 7; // Assuming 7 days in a week
+                    document.getElementById("weeklyRate").textContent = weeklyRate.toFixed(2);
+                    
+                    var dailyRate = totalRate;
+                    document.getElementById("dailyRate").textContent = dailyRate.toFixed(2);
+            }
+
         </script>
       </div>
+
+      <div id ="calculation" style="display: none;">
+
+        <h1>Total Rate Calculation</h1>
+
+        <table id="applianceTable">
+              <tr>
+                <th>Date</th>
+                <th>Appliance Name</th>
+                <th>Power Use (Watt)</th>
+                <th>Daily use time (hrs)</th>
+                <th>Monthly Power Rates of ALECO (Pesos per kWh)</th>
+                <th>Daily Consumption (kWh)</th>
+                <th>Actions</th>
+              </tr>
+              <!-- Existing appliance records will be dynamically added here -->
+          </table>
+
+        <button onclick="calculateTotalRate()">Calculate</button>
+
+        <table id="rate-table">
+            <thead>
+                <tr>
+                    <th>Rate Type</th>
+                    <th>Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total Power Rate</td>
+                    <td id="totalRate"></td>
+                </tr>
+                <tr>
+                    <td>Monthly Rate</td>
+                    <td id="monthlyRate"></td>
+                </tr>
+                <tr>
+                    <td>Weekly Rate</td>
+                    <td id="weeklyRate"></td>
+                </tr>
+                <tr>
+                    <td>Daily Rate</td>
+                    <td id="dailyRate"></td>
+                </tr>
+            </tbody>
+        </table>
+        <script>
+            //logout
+            document.getElementById("logoutButton").addEventListener("click", function() {
+                logout();
+            });
+          
+            //navbutton1
+            document.getElementById("showInventoryButton").addEventListener("click", function() {
+                inventoryButton();
+            });
+          
+            //navbutton2
+            document.getElementById("showCalculationButton").addEventListener("click", function() {
+                calculationButton();
+                displayApplianceData();
+            });
+
+            function calculateTotalRate() {
+            var inventoryTable = document.getElementById("applianceTable");
+            var rows = inventoryTable.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+            var totalRate = 0;
+            
+            for (var i = 0; i < rows.length; i++) {
+                var power = parseFloat(rows[i].cells[2].innerHTML);
+                var time = parseFloat(rows[i].cells[3].innerHTML);
+                var powerRate = parseFloat(rows[i].cells[4].innerHTML);
+                var rate = power * time * powerRate;
+                totalRate += rate;
+            }
+            
+            document.getElementById("totalRate").textContent = totalRate.toFixed(2);
+                    
+            var monthlyRate = totalRate * 30; // Assuming 30 days in a month
+            document.getElementById("monthlyRate").textContent = monthlyRate.toFixed(2);
+                    
+            var weeklyRate = totalRate * 7; // Assuming 7 days in a week
+            document.getElementById("weeklyRate").textContent = weeklyRate.toFixed(2);
+                    
+            var dailyRate = totalRate;
+            document.getElementById("dailyRate").textContent = dailyRate.toFixed(2);
+        }
+          </script>
+    </div>
 
     <script type="module">
         // Import the functions you need from the SDKs you need
@@ -452,6 +576,8 @@
                     //removes the login and signup forms
                     loginForm.style.display = 'none';
                     signupForm.style.display = 'none';
+
+                    document.getElementById('menu').style.display = 'block';
 
                     // Show the appliance inventory page
                     document.getElementById('applianceInventoryContent').style.display = 'block';

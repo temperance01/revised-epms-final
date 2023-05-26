@@ -20,3 +20,37 @@ function togglePasswordVisibility() {
       signupPasswordInput.type = 'password';
     }
   }
+
+
+function logout(){
+  // Hide the appliance inventory content
+  document.getElementById("applianceInventoryContent").style.display = "none";
+                
+  // Show the login and signup forms
+  document.getElementById("loginForm").style.display = "block";
+  document.getElementById("signupForm").style.display = "block";
+
+  //hide menu
+  document.getElementById('menu').style.display = 'none';
+  
+  // Clear any stored user email
+  localStorage.removeItem("userEmail");
+
+  // Clear the appliance table
+  var table = document.getElementById("applianceTable");
+  var rowCount = table.rows.length;
+
+  for (var i = rowCount - 1; i > 0; i--) {
+    table.deleteRow(i);
+  }
+}
+
+function inventoryButton(){
+  document.getElementById("applianceInventoryContent").style.display = "block";
+  document.getElementById("calculation").style.display = "none";
+}
+
+function calculationButton(){
+  document.getElementById("applianceInventoryContent").style.display = "none";
+  document.getElementById("calculation").style.display = "block";
+}
