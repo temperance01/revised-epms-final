@@ -4,19 +4,25 @@
     <title>ELECTRIC POWER MANAGEMENT SYSTEM</title>
     <link rel="stylesheet" type="text/css" href="main_style.css"> 
     <script src = "functions.js"></script>
+    <script src = "applianceinventory.js"></script>
+    <script src = "calculation.js"></script>
 </head>
 <body>
+    <!--implement Facebook root-->
     
+
+    <!--login-->
     <form id="loginForm">
         <h1>Login</h1>
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required><br><br>
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" required><br><br>
         <input type="checkbox" id="loginPasswordCheckbox" onchange="togglePasswordVisibility()">Show Password<br><br>
         <input type="submit" value="Login">
     </form>
-    
+
+    <!--signup-->
     <form id="signupForm">
         <h1>Sign up</h1>
         <label for="username">Username:</label>
@@ -24,24 +30,28 @@
         <label for="signupEmail">Email:</label>
         <input type="email" id="signupEmail" name="email" required><br><br>
         <label for="password">Password:</label>
-        <input type="password" id="signupPassword" name="password" required>
+        <input type="password" id="signupPassword" name="password" required><br><br>
         <input type="checkbox" id="signupPasswordCheckbox" onchange="togglePasswordVisibility()">Show Password<br><br>
         <input type="submit" id="signup_submit" value="Signup">
     </form>
-    
+
+    <!--menu-->
     <div id = "menu" style = "display: none;">
         <p id="welcomeMessage"></p>
         <button id="logoutButton">Logout</button>
 
         <button id="showInventoryButton">Show Appliance Inventory</button>
         <button id="showCalculationButton">Show Calculation</button>
+        <button id="showUpdatesButton">Show Updates</button>
     </div>
 
+    <!--inventory-->
     <div id="applianceInventoryContent" style="display: none;">
 
         <h1>Inventory of Appliances</h1>
       
         <button id="addButton">+</button>
+        <button id="removeButton">-</button>
       
         <div id="inputForm" style="display: none;">
           <h2>Appliance Data Form</h2>
@@ -75,217 +85,101 @@
           </tr>
           <!-- Existing appliance records will be dynamically added here -->
         </table>
-      
         <script>
-            //logout
-            document.getElementById("logoutButton").addEventListener("click", function() {
-                logout();
-            });
-            //navbutton1
-            document.getElementById("showInventoryButton").addEventListener("click", function() {
-                inventoryButton();
-            });
-            //navbutton2
-            document.getElementById("showCalculationButton").addEventListener("click", function() {
-                calculationButton();
-            });
-            
-            
-            //add function
-          document.getElementById("addButton").addEventListener("click", function() {
-            document.getElementById("inputForm").style.display = "block";
-            document.getElementById("date").value = "";
-            document.getElementById("name").value = "";
-            document.getElementById("power").value = "";
-            document.getElementById("dailyUse").value = "";
-            document.getElementById("rate").value = "";
-            document.getElementById("saveButton").style.display = "inline-block";
-            document.getElementById("updateButton").style.display = "none";
-          });
-      
-          // Get the user's email from local storage and display it
-          var userEmail = localStorage.getItem("userEmail");
-          if (userEmail) {
-            document.getElementById("userEmail").innerText = "User: " + userEmail;
-          }
-      
-          document.getElementById("saveButton").addEventListener("click", function(event) {
-            event.preventDefault();
-      
-            var date = document.getElementById("date").value;
-            var name = document.getElementById("name").value;
-            var power = document.getElementById("power").value;
-            var dailyUse = document.getElementById("dailyUse").value;
-            var rate = document.getElementById("rate").value;
-      
-            if (date === "" || name === "" || power === "" || dailyUse === "" || rate === "") {
-              alert("Please fill in all fields.");
-              return; // Stop further execution
-            }
-      
-            var dailyConsumption = (power * dailyUse) / 1000;
-      
-            var table = document.getElementById("applianceTable");
-            var row = table.insertRow(-1);
-      
-            var dateCell = row.insertCell(0);
-            var nameCell = row.insertCell(1);
-            var powerCell = row.insertCell(2);
-            var dailyUseCell = row.insertCell(3);
-            var rateCell = row.insertCell(4);
-            var consumptionCell = row.insertCell(5);
-            var actionsCell = row.insertCell(6);
-      
-            dateCell.textContent = date;
-            nameCell.textContent = name;
-            powerCell.textContent = power;
-            dailyUseCell.textContent = dailyUse;
-            rateCell.textContent = rate;
-            consumptionCell.textContent = dailyConsumption.toFixed(2);
-            actionsCell.innerHTML = `
-              <div class="actionButtons">
-                <button class="editButton" onclick="editRow(this)">Edit</button>
-                <button class="deleteButton" onclick="deleteRow(this, 'your_appliance_id')">Delete</button>
-              </div>
-            `;
-      
-            // Clear the input fields
-            document.getElementById("date").value = "";
-            document.getElementById("name").value = "";
-            document.getElementById("power").value = "";
-            document.getElementById("dailyUse").value = "";
-            document.getElementById("rate").value = "";
-      
-            // Hide the input form
-            document.getElementById("inputForm").style.display = "none";
-          });
-          
-          //update button
-          document.getElementById("updateButton").addEventListener("click", function(e) {
-            e.preventDefault();
+            inventoryFunctions();
 
-            // Get the input values
-            var date = document.getElementById("date").value;
-            var name = document.getElementById("name").value;
-            var power = document.getElementById("power").value;
-            var dailyUse = document.getElementById("dailyUse").value;
-            var rate = document.getElementById("rate").value;
+            function updateApplianceRecord(date, name, power, dailyUse, rate, consumption) {
+                var table = document.getElementById("applianceTable");
+                var rows = table.rows;
 
-            if (date === "" || name === "" || power === "" || dailyUse === "" || rate === "") {
-            alert("Please fill in all fields.");
-            return; // Stop further execution
+                for (var i = 1; i < rows.length; i++) {
+                    var row = rows[i];
+                    if (row.cells[0].textContent === date && row.cells[1].textContent === name) {
+                    row.cells[2].textContent = power;
+                    row.cells[3].textContent = dailyUse;
+                    row.cells[4].textContent = rate;
+                    row.cells[5].textContent = consumption;
+                    break;
+                    }
+                }
+
+                var cTable = document.getElementById("calculationTable");
+                var cRows = cTable.cRows;
+
+                for (var i = 1; i < cRows.length; i++) {
+                    var row = rows[i];
+                    if (row.cells[0].textContent === date && row.cells[1].textContent === name) {
+                    row.cells[2].textContent = power;
+                    row.cells[3].textContent = dailyUse;
+                    row.cells[4].textContent = rate;
+                    row.cells[5].textContent = consumption;
+                    break;
+                    }
+                }
+
             }
 
-            var dailyConsumption = (power * dailyUse) / 1000;
+            //edit button
+            function editRow(button) {
+                var row = button.parentNode.parentNode.parentNode;
+                var cells = row.getElementsByTagName("td");
 
-            var table = document.getElementById("applianceTable");
-            var newRow = table.insertRow(-1); // Insert at the bottom
+                document.getElementById("date").value = cells[0].textContent;
+                document.getElementById("name").value = cells[1].textContent;
+                document.getElementById("power").value = cells[2].textContent;
+                document.getElementById("dailyUse").value = cells[3].textContent;
+                document.getElementById("rate").value = cells[4].textContent;
 
-            var dateCell = newRow.insertCell(0);
-            var nameCell = newRow.insertCell(1);
-            var powerCell = newRow.insertCell(2);
-            var dailyUseCell = newRow.insertCell(3);
-            var rateCell = newRow.insertCell(4);
-            var consumptionCell = newRow.insertCell(5);
-            var actionsCell = newRow.insertCell(6);
+                document.getElementById("inputForm").style.display = "block";
+                document.getElementById("saveButton").style.display = "none";
+                document.getElementById("updateButton").style.display = "inline-block";
+                var calculationTable = document.getElementById("calculationTable");
+                var calculationRows = calculationTable.getElementsByTagName("tr");
 
-            dateCell.textContent = date;
-            nameCell.textContent = name;
-            powerCell.textContent = power;
-            dailyUseCell.textContent = dailyUse;
-            rateCell.textContent = rate;
-            consumptionCell.textContent = dailyConsumption.toFixed(2);
-            actionsCell.innerHTML = `
-            <div class="actionButtons">
-                <button class="editButton" onclick="editRow(this)">Edit</button>
-                <button class="deleteButton" onclick="deleteRow(this, 'your_appliance_id')">Delete</button>
-            </div>
-            `;
-
-            // Clear the input fields
-            document.getElementById("date").value = "";
-            document.getElementById("name").value = "";
-            document.getElementById("power").value = "";
-            document.getElementById("dailyUse").value = "";
-            document.getElementById("rate").value = "";
-
-            // Hide the input form
-            document.getElementById("inputForm").style.display = "none";
-        });
-
-          function updateApplianceRecord(date, name, power, dailyUse, rate, consumption) {
-            var table = document.getElementById("applianceTable");
-            var rows = table.rows;
-      
-            for (var i = 1; i < rows.length; i++) {
-              var row = rows[i];
-              if (row.cells[0].textContent === date && row.cells[1].textContent === name) {
-                row.cells[2].textContent = power;
-                row.cells[3].textContent = dailyUse;
-                row.cells[4].textContent = rate;
-                row.cells[5].textContent = consumption;
-                break;
-              }
-            }
-          }
-
-          //edit button
-          function editRow(button) {
-            var row = button.parentNode.parentNode.parentNode;
-            var cells = row.getElementsByTagName("td");
-      
-            document.getElementById("date").value = cells[0].textContent;
-            document.getElementById("name").value = cells[1].textContent;
-            document.getElementById("power").value = cells[2].textContent;
-            document.getElementById("dailyUse").value = cells[3].textContent;
-            document.getElementById("rate").value = cells[4].textContent;
-      
-            document.getElementById("inputForm").style.display = "block";
-            document.getElementById("saveButton").style.display = "none";
-            document.getElementById("updateButton").style.display = "inline-block";
-      
-            row.remove();
-          }
-
-          //delete button
-          function deleteRow(button, applianceId) {
-            var row = button.parentNode.parentNode.parentNode;
-            row.remove();
-          }
-
-          //calculates the total daily, weekly and monthly rates
-          function calculateTotalRate() {
-            var inventoryTable = document.getElementById("inventory-table");
-            var rows = inventoryTable.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-            var totalRate = 0;
-            
-            for (var i = 0; i < rows.length; i++) {
-                var power = parseFloat(rows[i].cells[2].innerHTML);
-                var time = parseFloat(rows[i].cells[3].innerHTML);
-                var powerRate = parseFloat(rows[i].cells[4].innerHTML);
-                var rate = power * time * powerRate;
-                totalRate+= rate;
-            }
-            document.getElementById("totalRate").textContent = totalRate.toFixed(2);
-                    
-                    var monthlyRate = totalRate * 30; // Assuming 30 days in a month
-                    document.getElementById("monthlyRate").textContent = monthlyRate.toFixed(2);
-                    
-                    var weeklyRate = totalRate * 7; // Assuming 7 days in a week
-                    document.getElementById("weeklyRate").textContent = weeklyRate.toFixed(2);
-                    
-                    var dailyRate = totalRate;
-                    document.getElementById("dailyRate").textContent = dailyRate.toFixed(2);
+                for (var i = 1; i < calculationRows.length; i++) {
+                    var calculationRow = calculationRows[i];
+                    if (
+                    calculationRow.cells[0].textContent === cells[0].textContent &&
+                    calculationRow.cells[1].textContent === cells[1].textContent
+                    ) {
+                    calculationRow.remove();
+                    break;
+                    }
+                }
+                
+                row.remove();
             }
 
-        </script>
+            //delete button
+            function deleteRow(button) {
+                var row = button.parentNode.parentNode.parentNode;
+                var date = row.cells[0].textContent;
+                var name = row.cells[1].textContent;
+
+                // Remove the row from the applianceTable
+                var applianceTable = document.getElementById("applianceTable");
+                applianceTable.deleteRow(row.rowIndex);
+
+                // Remove the row from the calculationTable
+                var calculationTable = document.getElementById("calculationTable");
+                var rows = calculationTable.getElementsByTagName("tr");
+                for (var i = 1; i < rows.length; i++) {
+                    if (rows[i].cells[0].textContent === date && rows[i].cells[1].textContent === name) {
+                    calculationTable.deleteRow(i);
+                    break;
+                    }
+                }
+            }
+
+          </script>
       </div>
 
+      <!--calculation-->
       <div id ="calculation" style="display: none;">
 
         <h1>Total Rate Calculation</h1>
 
-        <table id="applianceTable">
+        <table id="calculationTable">
               <tr>
                 <th>Date</th>
                 <th>Appliance Name</th>
@@ -293,14 +187,13 @@
                 <th>Daily use time (hrs)</th>
                 <th>Monthly Power Rates of ALECO (Pesos per kWh)</th>
                 <th>Daily Consumption (kWh)</th>
-                <th>Actions</th>
               </tr>
               <!-- Existing appliance records will be dynamically added here -->
           </table>
 
         <button onclick="calculateTotalRate()">Calculate</button>
 
-        <table id="rate-table">
+        <table id="rateTable">
             <thead>
                 <tr>
                     <th>Rate Type</th>
@@ -326,50 +219,40 @@
                 </tr>
             </tbody>
         </table>
-        <script>
-            //logout
-            document.getElementById("logoutButton").addEventListener("click", function() {
+    </div>
+
+    <div id ="updates" style="display: none;">
+        
+        <h1>Updates</h1>
+        <p>since the aleco page is not publicly acessible, </p>
+        <p>you can search "https://www.facebook.com/albayelectric" for local electricity updates</p>    
+
+        <p>used ngcp page since it is public</p>
+        <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FNGCPph&tabs=timeline&width=600&height=700&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&appId" width="600" height="700" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+
+    </div>
+
+    <!--menu js functions-->
+    <script>
+        //logout
+        document.getElementById("logoutButton").addEventListener("click", function() {
                 logout();
             });
-          
             //navbutton1
             document.getElementById("showInventoryButton").addEventListener("click", function() {
                 inventoryButton();
             });
-          
             //navbutton2
             document.getElementById("showCalculationButton").addEventListener("click", function() {
                 calculationButton();
-                displayApplianceData();
             });
+            //navbutton3
+            document.getElementById("showUpdatesButton").addEventListener("click", function() {
+                updatesButton();
+            });
+    </script>
 
-            function calculateTotalRate() {
-            var inventoryTable = document.getElementById("applianceTable");
-            var rows = inventoryTable.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-            var totalRate = 0;
-            
-            for (var i = 0; i < rows.length; i++) {
-                var power = parseFloat(rows[i].cells[2].innerHTML);
-                var time = parseFloat(rows[i].cells[3].innerHTML);
-                var powerRate = parseFloat(rows[i].cells[4].innerHTML);
-                var rate = power * time * powerRate;
-                totalRate += rate;
-            }
-            
-            document.getElementById("totalRate").textContent = totalRate.toFixed(2);
-                    
-            var monthlyRate = totalRate * 30; // Assuming 30 days in a month
-            document.getElementById("monthlyRate").textContent = monthlyRate.toFixed(2);
-                    
-            var weeklyRate = totalRate * 7; // Assuming 7 days in a week
-            document.getElementById("weeklyRate").textContent = weeklyRate.toFixed(2);
-                    
-            var dailyRate = totalRate;
-            document.getElementById("dailyRate").textContent = dailyRate.toFixed(2);
-        }
-          </script>
-    </div>
-
+    <!--FIREBASE RELATED CODE BELOW-->
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
@@ -396,7 +279,7 @@
         const db = getFirestore(app);
 
 
-        //gets exsisting appliance data
+        // Gets existing appliance data
         function getApplicationData() {
         const userUID = auth.currentUser.uid;
         const appliancesCollectionRef = collection(db, "users", userUID, "appliances");
@@ -409,13 +292,14 @@
             });
             console.log(applianceList);
 
-            // Get the table reference
-            var table = document.getElementById("applianceTable");
-
+            // Get the table references
+            var applianceTable = document.getElementById("applianceTable");
+            var calculationTable = document.getElementById("calculationTable");
 
             // Iterate over the applianceList and populate the table rows
             applianceList.forEach((appliance) => {
-                var row = table.insertRow(-1);
+                // Populate data in the applianceTable
+                var row = applianceTable.insertRow(-1);
 
                 var dateCell = row.insertCell(0);
                 var nameCell = row.insertCell(1);
@@ -437,6 +321,23 @@
                     <button class="deleteButton" onclick="deleteRow(this)">Delete</button>
                 </div>
                 `;
+
+                // Populate data in the calculationTable
+                var calcRow = calculationTable.insertRow(-1);
+
+                var calcDateCell = calcRow.insertCell(0);
+                var calcNameCell = calcRow.insertCell(1);
+                var calcPowerCell = calcRow.insertCell(2);
+                var calcDailyUseCell = calcRow.insertCell(3);
+                var calcRateCell = calcRow.insertCell(4);
+                var calcConsumptionCell = calcRow.insertCell(5);
+
+                calcDateCell.innerHTML = appliance.date;
+                calcNameCell.innerHTML = appliance.name;
+                calcPowerCell.innerHTML = appliance.power;
+                calcDailyUseCell.innerHTML = appliance.dailyUse;
+                calcRateCell.innerHTML = appliance.rate;
+                calcConsumptionCell.innerHTML = appliance.consumption;
             });
             })
             .catch((error) => {
@@ -457,6 +358,12 @@
             const rate = document.getElementById("rate").value.trim();
 
             const dailyConsumption = (power * dailyUse) / 1000;
+
+            //check for empty fields
+            if (date === "" || name === "" || power === "" || dailyUse === "" || rate === "") {
+            alert("Please fill in all fields.");
+            return; // Stop further execution
+            }
 
             // Create an object with the appliance data
             const applianceData = {
@@ -480,8 +387,9 @@
                 alert("Appliance data added to Firestore!");
                 console.log("appliance id = " + docRef.id);
 
+                /*
                 // Store the docRef.id for later use
-                applianceId = docRef.id;
+                applianceId = docRef.id; */
 
                 // Reset the form fields
                 document.getElementById("date").value = "";

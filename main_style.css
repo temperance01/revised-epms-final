@@ -1,0 +1,10 @@
+#loginForm,
+#signupForm {
+            width: 45%;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        #signupForm {
+            margin-left: 5%;
+        }

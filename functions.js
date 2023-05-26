@@ -23,8 +23,9 @@ function togglePasswordVisibility() {
 
 
 function logout(){
-  // Hide the appliance inventory content
+  // Hide the content
   document.getElementById("applianceInventoryContent").style.display = "none";
+  document.getElementById("calculation").style.display = "none";
                 
   // Show the login and signup forms
   document.getElementById("loginForm").style.display = "block";
@@ -43,6 +44,14 @@ function logout(){
   for (var i = rowCount - 1; i > 0; i--) {
     table.deleteRow(i);
   }
+
+  // Clear the calculation table
+  var table = document.getElementById("calculationTable");
+  var rowCount = table.rows.length;
+
+  for (var i = rowCount - 1; i > 0; i--) {
+    table.deleteRow(i);
+  }
 }
 
 function inventoryButton(){
@@ -53,4 +62,10 @@ function inventoryButton(){
 function calculationButton(){
   document.getElementById("applianceInventoryContent").style.display = "none";
   document.getElementById("calculation").style.display = "block";
+}
+
+function updatesButton(){
+  document.getElementById("applianceInventoryContent").style.display = "none";
+  document.getElementById("calculation").style.display = "none";
+  document.getElementById("updates").style.display = "block";
 }
