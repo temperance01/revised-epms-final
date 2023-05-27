@@ -1,10 +1,320 @@
-#loginForm,
-#signupForm {
-            width: 45%;
-            display: inline-block;
-            vertical-align: top;
-        }
+/* Container for the forms */
+.container {
+  display: flex;
+}
 
-        #signupForm {
-            margin-left: 5%;
-        }
+/* Signup form styling */
+#signupForm {
+  flex: 1;
+  margin: 0 10px;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+}
+
+/* Login form styling */
+#loginForm {
+  flex: 1;
+  margin: 0 10px;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-family: Arial, sans-serif;
+}
+
+input[type="checkbox"] {
+  margin-bottom: 15px;
+}
+
+input[type="submit"],
+button {
+  width: 100px; /* Set a fixed width of 100px */
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #0080ff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+}
+
+input[type="submit"]:hover,
+button:hover {
+  background-color: #005cb3;
+}
+
+/* Toggle password visibility */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-reveal,
+input[type="password"]::-webkit-clear {
+  display: none !important;
+}
+
+button:hover {
+  background-color: #005cb3;
+}
+
+/* Menu */
+#menu {
+  display: flex;
+  flex-direction: column; /* Change to column */
+  align-items: center; /* Align items to the center */
+  justify-content: space-between; /* Adjust alignment to space between */
+  background-color: #f2f2f2;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+#menu #message {
+  align-self: flex-start; /* Align to the top left */
+}
+
+#menu #navigation {
+  display: flex;
+  flex-direction: column; /* Change to column */
+  align-items: center; /* Align items to the center */
+}
+
+
+#menu p {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 14px; /* Adjust the font size as desired */
+  margin-bottom: 20px;
+}
+
+#menu button {
+  width: 300px; /* Adjust the width as desired */
+  padding: 8px; /* Adjust the padding as desired */
+  border: none;
+  border-radius: 4px;
+  background-color: #0080ff;
+  color: #fff;
+  font-size: 14px; /* Adjust the font size as desired */
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  margin-bottom: 10px;
+  
+}
+
+#menu button:hover {
+  background-color: #005cb3;
+}
+
+/* Inventory */
+#applianceInventoryContent {
+  display: none;
+  margin-top: 20px;
+}
+
+#applianceInventoryContent h1 {
+  text-align: center;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+#applianceInventoryContent #addButton,
+#applianceInventoryContent #removeButton {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 30px; /* Adjusted the border-radius value */
+  background-color: #0080ff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  margin-bottom: 10px;
+}
+
+/* CSS styles for the applianceInventoryContent, calculation, and updates divs */
+#applianceInventoryContent,
+#calculation,
+#updates {
+  display: none;
+  text-align: center;
+}
+
+#applianceInventoryContent table,
+#calculation table,
+#updates iframe {
+  margin: 0 auto;
+  width: 80%;
+  max-width: 800px;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+#applianceInventoryContent th,
+#applianceInventoryContent td,
+#calculation th,
+#calculation td,
+#updates iframe {
+  padding: 12px;
+  border: 1px solid #ccc;
+  font-family: Arial, sans-serif;
+}
+
+#applianceInventoryContent th {
+  background-color: #0080ff;
+  color: #fff;
+}
+
+#applianceInventoryContent td {
+  background-color: #f2f2f2;
+}
+
+#applianceInventoryContent tr:hover td {
+  background-color: #d9d9d9;
+}
+
+#calculation th {
+  background-color: #333;
+  color: #fff;
+}
+
+#calculation td {
+  background-color: #f2f2f2;
+}
+
+#calculation tr:hover td {
+  background-color: #d9d9d9;
+}
+
+#updates {
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+#updates h2 {
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+#updates p {
+  color: #333;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#calculateButton {
+  width: 100px; /* Set a fixed width of 100px */
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #0080ff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+}
+
+#calculateButton:hover {
+  background-color: #005cb3;
+}
+
+#inputForm {
+  display: none;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+#inputForm h2 {
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+#inputForm label {
+  color: #333;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#inputForm input[type="date"],
+#inputForm input[type="number"] {
+  width: 50px; /* Set a fixed width of 50px */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-family: Arial, sans-serif;
+}
+
+#inputForm #saveButton,
+#inputForm #updateButton {
+  width: 100px; /* Set a fixed width of 100px */
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #0080ff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  margin-top: 10px;
+}
+
+#inputForm #saveButton:hover,
+#inputForm #updateButton:hover {
+  background-color: #005cb3;
+}
+
+#updates {
+  display: none;
+  text-align: center;
+}
+
+#updates h1 {
+  text-align: center;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+#updates p {
+  color: #333;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#updates iframe {
+  align-self: center;
+  display: block; /* Ensure the iframe is a block element */
+  margin: 0 auto; /* Center the iframe horizontally */
+  max-width: 500px; /* Set the maximum width to fill the container */
+}

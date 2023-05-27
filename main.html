@@ -10,8 +10,8 @@
 <body>
     <!--implement Facebook root-->
     
-
-    <!--login-->
+    <div class="container">
+        <!--login-->
     <form id="loginForm">
         <h1>Login</h1>
         <label for="email">Email:</label>
@@ -34,19 +34,26 @@
         <input type="checkbox" id="signupPasswordCheckbox" onchange="togglePasswordVisibility()">Show Password<br><br>
         <input type="submit" id="signup_submit" value="Signup">
     </form>
+    </div>
+    
 
     <!--menu-->
-    <div id = "menu" style = "display: none;">
-        <p id="welcomeMessage"></p>
-        <button id="logoutButton">Logout</button>
+    <div id="menu" style = "display: none;">
+        <div id = "message">
+            <p id="welcomeMessage"></p>
+        </div>
+        <div id = "navigation">
+            <button id="showInventoryButton">Show Appliance Inventory</button>
+            <button id="showCalculationButton">Show Calculation</button>
+            <button id="showUpdatesButton">Show Updates</button>
+            <button id="logoutButton">Logout</button>
+        </div>
+        
+      </div>
 
-        <button id="showInventoryButton">Show Appliance Inventory</button>
-        <button id="showCalculationButton">Show Calculation</button>
-        <button id="showUpdatesButton">Show Updates</button>
-    </div>
 
     <!--inventory-->
-    <div id="applianceInventoryContent" style="display: none;">
+    <div id="applianceInventoryContent" class = "content" style="display: none;">
 
         <h1>Inventory of Appliances</h1>
       
@@ -175,7 +182,7 @@
       </div>
 
       <!--calculation-->
-      <div id ="calculation" style="display: none;">
+      <div id ="calculation" class = "content" style="display: none;">
 
         <h1>Total Rate Calculation</h1>
 
@@ -191,7 +198,7 @@
               <!-- Existing appliance records will be dynamically added here -->
           </table>
 
-        <button onclick="calculateTotalRate()">Calculate</button>
+        <button id = "calculateButton" onclick="calculateTotalRate()">Calculate</button>
 
         <table id="rateTable">
             <thead>
@@ -221,14 +228,14 @@
         </table>
     </div>
 
-    <div id ="updates" style="display: none;">
+    <div id ="updates" class = "content" style="display: none;">
         
         <h1>Updates</h1>
         <p>since the aleco page is not publicly acessible, </p>
         <p>you can search "https://www.facebook.com/albayelectric" for local electricity updates</p>    
 
         <p>used ngcp page since it is public</p>
-        <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FNGCPph&tabs=timeline&width=600&height=700&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&appId" width="600" height="700" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+        <iframe id ="facebook" src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FNGCPph&tabs=timeline&width=3000&height=500&small_header=true&adapt_container_width=false&hide_cover=false&show_facepile=false&appId" width="3000" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
 
     </div>
 

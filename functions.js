@@ -57,11 +57,13 @@ function logout(){
 function inventoryButton(){
   document.getElementById("applianceInventoryContent").style.display = "block";
   document.getElementById("calculation").style.display = "none";
+  document.getElementById("updates").style.display = "none";
 }
 
 function calculationButton(){
   document.getElementById("applianceInventoryContent").style.display = "none";
   document.getElementById("calculation").style.display = "block";
+  document.getElementById("updates").style.display = "none";
 }
 
 function updatesButton(){
