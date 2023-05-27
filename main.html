@@ -542,16 +542,6 @@
                         signup_date: dt,
                     });
                     alert('User signed up and logged in!');
-                    //removes the login and signup forms
-                    loginForm.style.display = 'none';
-                    signupForm.style.display = 'none';
-
-                    // Show the appliance inventory page
-                    document.getElementById('applianceInventoryContent').style.display = 'block';
-
-                    //welcome message based on the user just logged in
-                    const welcomeMessage = document.getElementById('welcomeMessage');
-                    welcomeMessage.textContent = `Welcome, ${username}!`;
 
                     //gets the email of the user for the appliance database
                     const userEmail = document.getElementById('userEmail');
